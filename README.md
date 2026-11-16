@@ -1,10 +1,5 @@
 # BrandGuard AI 🛡️
-### Intelligent Multimodal Brand Governance & Policy Knowledge Graph Platform
-**Event:** Inkloom AI Brand Governance Hackathon — CodeZen India 2026  
-**Stage:** Round 2 (The Build)  
-**Team:** ZeroToOne  
-**Lead Developer:** Ayush Trivedi ([@Ayush-web28](https://github.com/Ayush-web28))  
-**Repository:** [https://github.com/Ayush-web28/BrandGuard-AI](https://github.com/Ayush-web28/BrandGuard-AI)  
+### Intelligent Multimodal Brand Governance & Policy Knowledge Graph Platform 
 
 ---
 
