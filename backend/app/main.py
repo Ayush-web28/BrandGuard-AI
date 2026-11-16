@@ -1,4 +1,11 @@
+import sys
 import os
+
+# Ensure 'backend' directory is always in sys.path
+backend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if backend_dir not in sys.path:
+    sys.path.insert(0, backend_dir)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -23,17 +30,24 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register REST endpoints under /api
+# Register REST endpoints under /api FIRST so they take routing precedence
 app.include_router(api_router, prefix="/api")
 app.include_router(webhook_router, prefix="/api/webhook")
 
-# Serve frontend build if dist folder exists
-frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../frontend/dist"))
+# Serve frontend build if dist folder exists (2 levels up from backend/app -> CodeZen/frontend/dist)
+frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/dist"))
 if os.path.exists(frontend_dist):
     app.mount("/assets", StaticFiles(directory=os.path.join(frontend_dist, "assets")), name="assets")
 
+    @app.get("/")
+    async def serve_index():
+        return FileResponse(os.path.join(frontend_dist, "index.html"))
+
     @app.get("/{full_path:path}")
     async def serve_spa(full_path: str):
+        # Do not catch /api routes
+        if full_path.startswith("api/"):
+            return None
         file_path = os.path.join(frontend_dist, full_path)
         if os.path.exists(file_path) and os.path.isfile(file_path):
             return FileResponse(file_path)
