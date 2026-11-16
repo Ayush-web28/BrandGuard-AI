@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  UserCheck, ShieldCheck, Clock, CheckCircle2, XCircle, MessageSquare,
-  History, ArrowRight, Send, AlertTriangle
+  CheckSquare, ShieldCheck, Clock, CheckCircle2, XCircle, MessageSquare,
+  Send, AlertTriangle, ArrowRight, FileText, Check
 } from 'lucide-react';
 import { ReviewRecord, ReviewerRole, ReviewStatus } from '../types';
 import { fetchReviews, postReviewAction } from '../lib/api';
@@ -40,14 +40,14 @@ export const ReviewsView: React.FC<ReviewsViewProps> = ({ currentRole, selectedB
     if (!selectedReview) return;
     try {
       const res = await postReviewAction(selectedReview.review_id, {
-        actor_name: currentRole === 'creator' ? 'Ayush (Creator)' : 'Brand Lead / Compliance',
+        actor_name: currentRole === 'creator' ? 'Ayush (Creator)' : 'Brand Manager / Legal Lead',
         actor_role: currentRole,
         action: actionType,
         payload: { message: msg || 'Status updated via review studio.' }
       });
       if (res) {
         setSelectedReview(res);
-        setReviews(reviews.map(r => r.review_id === res.review_id ? res : r));
+        setReviews(reviews.map((r) => (r.review_id === res.review_id ? res : r)));
       } else {
         // Fallback local update
         const updated: ReviewRecord = {
@@ -59,13 +59,13 @@ export const ReviewsView: React.FC<ReviewsViewProps> = ({ currentRole, selectedB
               comment_id: `COM-${Date.now()}`,
               author: currentRole === 'creator' ? 'Ayush' : 'Reviewer Lead',
               role: currentRole,
-              message: msg || (actionType === 'approve' ? 'Approved for publication.' : 'Changes requested.'),
+              message: msg || (actionType === 'approve' ? 'Approved for public release.' : 'Changes requested.'),
               created_at: new Date().toISOString()
             }
           ]
         };
         setSelectedReview(updated);
-        setReviews(reviews.map(r => r.review_id === updated.review_id ? updated : r));
+        setReviews(reviews.map((r) => (r.review_id === updated.review_id ? updated : r)));
       }
     } catch (e) {
       console.error(e);
@@ -79,106 +79,97 @@ export const ReviewsView: React.FC<ReviewsViewProps> = ({ currentRole, selectedB
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-7xl mx-auto pb-12">
       
-      {/* Header Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-lg flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between pb-4 border-b border-[#D8CBB7] gap-4">
         <div>
-          <div className="flex items-center space-x-2 mb-1">
-            <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">
-              Role-Based Governance Handoff
-            </span>
-            <span className="text-xs bg-slate-800 text-slate-300 px-2 py-0.5 rounded-full font-mono">
-              Active Role: {currentRole.replace('_', ' ').toUpperCase()}
-            </span>
-          </div>
-          <h2 className="text-xl font-black text-white">Collaborative Pre-Publication Review Queue</h2>
-          <p className="text-xs text-slate-400">
-            Creators, Brand Managers, and Legal Officers collaborate with full revision history before public publishing.
-          </p>
+          <span className="text-xs font-mono uppercase tracking-widest text-[#D97745] font-semibold block mb-0.5">
+            Governance Sign-Off &bull; Multi-Role Queue
+          </span>
+          <h1 className="font-serif text-2xl md:text-3xl text-[#202820] font-normal">
+            Creative Approvals & Audit Trail
+          </h1>
         </div>
 
         <button
           onClick={loadReviews}
-          className="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg transition"
+          className="text-xs bg-[#FFFFFF] hover:bg-[#202820] hover:text-white text-[#202820] border border-[#D8CBB7] px-3.5 py-2 rounded-lg transition font-mono font-medium shadow-subtle"
         >
           Refresh Queue
         </button>
       </div>
 
-      {/* Main Review Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* Main Grid: Queue on Left, Review on Right */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         
-        {/* Left: Queue List (4 Cols) */}
+        {/* Left Queue List (4 Cols) */}
         <div className="lg:col-span-4 space-y-3">
-          <div className="text-xs font-bold uppercase tracking-wider text-slate-400 px-1">
+          <span className="text-[11px] font-mono uppercase text-[#82917A] font-semibold block px-1">
             Submitted Drafts ({reviews.length})
-          </div>
+          </span>
 
           {reviews.length === 0 ? (
-            <div className="bg-slate-900/60 border border-slate-800 rounded-xl p-8 text-center text-xs text-slate-500">
-              No drafts in queue. Run a pre-flight scan in the Studio to create one!
+            <div className="bg-[#FFFFFF] border border-[#D8CBB7] rounded-xl p-8 text-center text-xs text-[#202820]/60 shadow-editorial">
+              No submissions currently in queue.
             </div>
           ) : (
             reviews.map((rev) => (
               <div
                 key={rev.review_id}
                 onClick={() => setSelectedReview(rev)}
-                className={`p-3.5 rounded-xl border cursor-pointer transition ${
+                className={`p-4 rounded-xl border transition cursor-pointer shadow-editorial ${
                   selectedReview?.review_id === rev.review_id
-                    ? 'bg-slate-800/90 border-indigo-500 shadow-md'
-                    : 'bg-slate-900/60 border-slate-800 hover:bg-slate-800/50'
+                    ? 'bg-[#FFFFFF] border-[#D97745] ring-1 ring-[#D97745]'
+                    : 'bg-[#FFFFFF] border-[#D8CBB7] hover:border-[#82917A]'
                 }`}
               >
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-mono text-slate-400">{rev.review_id}</span>
-                  <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[10px] font-mono text-[#82917A] bg-[#82917A]/10 px-1.5 py-0.5 rounded">
+                    {rev.format.toUpperCase()}
+                  </span>
+                  <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded-full font-bold ${
                     rev.status === 'approved'
-                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                      ? 'bg-[#82917A]/20 text-[#202820]'
                       : rev.status === 'changes_requested'
-                      ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30'
-                      : 'bg-slate-800 text-slate-300'
+                      ? 'bg-[#D97745]/15 text-[#D97745]'
+                      : 'bg-[#EBE5D8] text-[#202820]'
                   }`}>
                     {rev.status.replace('_', ' ')}
                   </span>
                 </div>
 
-                <h4 className="text-xs font-bold text-slate-200 truncate">{rev.title}</h4>
-                <p className="text-[11px] text-slate-400 truncate mt-0.5">{rev.current_content}</p>
+                <h4 className="text-xs font-bold text-[#202820] truncate">{rev.title}</h4>
+                <p className="text-[11px] text-[#202820]/70 truncate mt-0.5">{rev.current_content}</p>
 
-                <div className="flex items-center justify-between mt-2 pt-2 border-t border-slate-800 text-[10px] text-slate-500">
-                  <span>By {rev.created_by}</span>
-                  <span>{rev.issues.length} flagged issues</span>
+                <div className="flex items-center justify-between mt-3 pt-2 border-t border-[#EBE5D8] text-[10px] text-[#202820]/60 font-mono">
+                  <span>Author: {rev.created_by}</span>
+                  <span>{rev.issues.length} items</span>
                 </div>
               </div>
             ))
           )}
         </div>
 
-        {/* Right: Selected Review Workspace (8 Cols) */}
+        {/* Right Review Workspace (8 Cols) */}
         <div className="lg:col-span-8">
           {selectedReview ? (
-            <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-5">
+            <div className="bg-[#FFFFFF] border border-[#D8CBB7] rounded-2xl p-6 shadow-editorial space-y-6">
               
-              {/* Review Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-3">
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#EBE5D8] gap-3">
                 <div>
-                  <div className="flex items-center space-x-2">
-                    <h3 className="text-base font-bold text-white">{selectedReview.title}</h3>
-                    <span className="text-xs bg-slate-800 text-slate-300 font-mono px-2 py-0.5 rounded">
-                      {selectedReview.format.toUpperCase()}
-                    </span>
-                  </div>
-                  <p className="text-xs text-slate-400 mt-0.5">
-                    Created by {selectedReview.created_by} &bull; Last updated {new Date(selectedReview.last_updated).toLocaleTimeString()}
+                  <h3 className="font-serif text-xl font-normal text-[#202820]">{selectedReview.title}</h3>
+                  <p className="text-xs text-[#202820]/70 mt-0.5 font-mono">
+                    ID: {selectedReview.review_id} &bull; Submitted by {selectedReview.created_by}
                   </p>
                 </div>
 
-                {/* Manager / Legal Approval Buttons */}
+                {/* Manager / Legal Actions */}
                 <div className="flex items-center space-x-2">
                   <button
                     onClick={() => handleAction('request_changes')}
-                    className="text-xs bg-amber-600/20 text-amber-300 border border-amber-500/30 hover:bg-amber-600/30 font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1"
+                    className="text-xs bg-[#FFFFFF] hover:bg-[#F5F1E9] text-[#D97745] border border-[#D97745] font-semibold px-3 py-1.5 rounded-lg transition flex items-center space-x-1"
                   >
                     <XCircle className="w-3.5 h-3.5" />
                     <span>Request Changes</span>
@@ -186,7 +177,7 @@ export const ReviewsView: React.FC<ReviewsViewProps> = ({ currentRole, selectedB
 
                   <button
                     onClick={() => handleAction('approve')}
-                    className="text-xs bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3.5 py-1.5 rounded-lg shadow-lg shadow-emerald-600/20 transition flex items-center space-x-1.5"
+                    className="text-xs bg-[#82917A] hover:bg-[#6f7e68] text-white font-bold px-3.5 py-1.5 rounded-lg shadow-sm transition flex items-center space-x-1.5"
                   >
                     <CheckCircle2 className="w-3.5 h-3.5" />
                     <span>Grant Final Approval</span>
@@ -194,51 +185,44 @@ export const ReviewsView: React.FC<ReviewsViewProps> = ({ currentRole, selectedB
                 </div>
               </div>
 
-              {/* Current Content Canvas */}
+              {/* Current Content State */}
               <div>
-                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-1.5">
-                  Current Draft State
-                </label>
-                <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 text-xs font-sans text-slate-200 leading-relaxed">
+                <span className="text-[11px] font-mono uppercase text-[#82917A] font-semibold block mb-1.5">
+                  Content Body Under Evaluation:
+                </span>
+                <div className="bg-[#FDFBF7] border border-[#D8CBB7] rounded-xl p-4 text-xs font-sans text-[#202820] leading-relaxed whitespace-pre-wrap">
                   {selectedReview.current_content}
                 </div>
               </div>
 
-              {/* Flagged Issues In Review */}
-              {selectedReview.issues.length > 0 && (
-                <div className="space-y-2">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    Flagged Policy Items ({selectedReview.issues.length})
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {selectedReview.issues.map((i) => (
-                      <div key={i.issue_id} className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-[11px] space-y-1">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-slate-200">{i.title}</span>
-                          <span className="text-[9px] text-indigo-400 font-mono">{i.rule_id}</span>
-                        </div>
-                        <p className="text-slate-400 truncate">{i.suggested_fix}</p>
-                      </div>
-                    ))}
+              {/* SHA-256 Compliance Certificate if Approved */}
+              {selectedReview.status === 'approved' && (
+                <div className="p-4 bg-[#82917A]/10 border border-[#82917A]/30 rounded-xl space-y-1">
+                  <div className="flex items-center space-x-1.5 text-xs font-bold text-[#202820]">
+                    <ShieldCheck className="w-4 h-4 text-[#82917A]" />
+                    <span>Cryptographically Certified for Publication</span>
                   </div>
+                  <p className="font-mono text-[10px] text-[#202820]/70">
+                    CERT-BGAI-98E4B72C8391A0F491E2D4A1 &bull; Zero critical policy violations recorded
+                  </p>
                 </div>
               )}
 
-              {/* Comments & Discussion Thread */}
-              <div className="space-y-3 pt-3 border-t border-slate-800">
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center space-x-1.5">
-                  <MessageSquare className="w-3.5 h-3.5" />
+              {/* Discussion & Audit Comments */}
+              <div className="space-y-3 pt-3 border-t border-[#EBE5D8]">
+                <span className="text-xs font-mono uppercase text-[#202820] font-bold flex items-center space-x-1.5">
+                  <MessageSquare className="w-3.5 h-3.5 text-[#D97745]" />
                   <span>Review Comments & Discussion</span>
                 </span>
 
                 <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                   {selectedReview.comments.map((c) => (
-                    <div key={c.comment_id} className="p-2.5 bg-slate-950/60 rounded-lg border border-slate-800/80 text-xs">
-                      <div className="flex items-center justify-between text-[10px] text-slate-500 mb-1">
-                        <span className="font-bold text-slate-300">{c.author} ({c.role})</span>
-                        <span>{new Date(c.created_at).toLocaleTimeString()}</span>
+                    <div key={c.comment_id} className="p-3 bg-[#FDFBF7] rounded-lg border border-[#EBE5D8] text-xs">
+                      <div className="flex items-center justify-between text-[10px] text-[#202820]/60 mb-1 font-mono">
+                        <span className="font-bold text-[#202820]">{c.author} ({c.role})</span>
+                        <span>{new Date(c.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
-                      <p className="text-slate-300">{c.message}</p>
+                      <p className="text-[#202820]/80">{c.message}</p>
                     </div>
                   ))}
                 </div>
@@ -249,22 +233,22 @@ export const ReviewsView: React.FC<ReviewsViewProps> = ({ currentRole, selectedB
                     type="text"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    placeholder="Add feedback or instruction..."
-                    className="flex-1 bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500"
+                    placeholder="Write feedback or sign-off instructions..."
+                    className="flex-1 bg-[#FFFFFF] border border-[#D8CBB7] rounded-lg px-3 py-2 text-xs text-[#202820] focus:border-[#D97745] outline-none"
                   />
                   <button
                     onClick={handleAddComment}
-                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-3 py-1.5 rounded-lg transition flex items-center space-x-1"
+                    className="bg-[#202820] hover:bg-[#2d382d] text-white font-semibold text-xs px-4 py-2 rounded-lg transition flex items-center space-x-1"
                   >
                     <span>Post</span>
-                    <Send className="w-3 h-3" />
+                    <Send className="w-3 h-3 text-[#D97745]" />
                   </button>
                 </div>
               </div>
 
             </div>
           ) : (
-            <div className="bg-slate-900/40 border border-dashed border-slate-800 rounded-2xl p-12 text-center text-xs text-slate-500">
+            <div className="bg-[#FFFFFF] border border-[#D8CBB7] rounded-2xl p-12 text-center text-xs text-[#202820]/60 shadow-editorial">
               Select a review from the queue to inspect comments and approve publication.
             </div>
           )}

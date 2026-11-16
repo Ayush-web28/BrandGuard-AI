@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Navbar } from './components/Navbar';
+import { LandingPage } from './components/LandingPage';
+import { Sidebar } from './components/Sidebar';
+import { DashboardView } from './components/DashboardView';
 import { Studio } from './components/Studio';
 import { VaultView } from './components/VaultView';
-import { ReviewsView } from './components/ReviewsView';
+import { PolicyGraphView } from './components/PolicyGraphView';
 import { AnalyticsView } from './components/AnalyticsView';
+import { ReviewsView } from './components/ReviewsView';
+import { TeamView } from './components/TeamView';
+import { SettingsView } from './components/SettingsView';
 import { BrandProfile, ReviewerRole, ScanResult } from './types';
 import { fetchBrands } from './lib/api';
 
 export function App() {
-  const [activeTab, setActiveTab] = useState<string>('studio');
+  const [showLanding, setShowLanding] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<string>('overview');
   const [brands, setBrands] = useState<BrandProfile[]>([]);
   const [selectedBrandId, setSelectedBrandId] = useState<string>('inkloom');
   const [currentRole, setCurrentRole] = useState<ReviewerRole>('creator');
@@ -25,12 +31,18 @@ export function App() {
     init();
   }, []);
 
-  const currentBrand = brands.find(b => b.brand_id === selectedBrandId) || brands[0];
+  const currentBrand = brands.find((b) => b.brand_id === selectedBrandId) || brands[0];
+
+  // If showing landing page
+  if (showLanding) {
+    return <LandingPage onEnterStudio={() => setShowLanding(false)} />;
+  }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-indigo-600 selection:text-white">
-      {/* Top Navbar */}
-      <Navbar
+    <div className="min-h-screen bg-[#F5F1E9] text-[#202820] flex font-sans antialiased selection:bg-[#D97745] selection:text-white">
+      
+      {/* Persistent Elegant Sidebar */}
+      <Sidebar
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         brands={brands}
@@ -38,18 +50,28 @@ export function App() {
         setSelectedBrandId={setSelectedBrandId}
         currentRole={currentRole}
         setCurrentRole={setCurrentRole}
+        onExitToLanding={() => setShowLanding(true)}
       />
 
-      {/* Main Content Viewport */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Main Studio Viewport */}
+      <main className="flex-1 overflow-y-auto min-h-screen px-6 lg:px-12 py-8">
         {currentBrand ? (
           <>
+            {activeTab === 'overview' && (
+              <DashboardView
+                currentBrand={currentBrand}
+                onNavigateToStudio={() => setActiveTab('studio')}
+                onNavigateToReviews={() => setActiveTab('approvals')}
+                onNavigateToVault={() => setActiveTab('vault')}
+              />
+            )}
+
             {activeTab === 'studio' && (
               <Studio
                 currentBrand={currentBrand}
                 currentRole={currentRole}
                 onScanCompleted={(res) => setLastScanResult(res)}
-                onNavigateToReviews={() => setActiveTab('reviews')}
+                onNavigateToReviews={() => setActiveTab('approvals')}
               />
             )}
 
@@ -57,44 +79,39 @@ export function App() {
               <VaultView currentBrand={currentBrand} />
             )}
 
-            {activeTab === 'reviews' && (
+            {activeTab === 'graph' && (
+              <PolicyGraphView currentBrand={currentBrand} />
+            )}
+
+            {activeTab === 'analytics' && (
+              <AnalyticsView />
+            )}
+
+            {activeTab === 'approvals' && (
               <ReviewsView
                 currentRole={currentRole}
                 selectedBrandId={selectedBrandId}
               />
             )}
 
-            {activeTab === 'analytics' && (
-              <AnalyticsView />
+            {activeTab === 'team' && (
+              <TeamView
+                currentRole={currentRole}
+                setCurrentRole={setCurrentRole}
+              />
+            )}
+
+            {activeTab === 'settings' && (
+              <SettingsView />
             )}
           </>
         ) : (
-          <div className="text-center py-20 text-slate-500">
-            Initializing BrandGuard Knowledge Engine...
+          <div className="flex items-center justify-center min-h-[60vh] text-xs font-mono text-[#82917A]">
+            Initializing BrandGuard Studio Knowledge Engine...
           </div>
         )}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950/80 py-4 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>
-            <strong>BrandGuard AI</strong> &bull; Team ZeroToOne (Ayush Trivedi) &bull; CodeZen India 2026
-          </span>
-          <div className="flex items-center space-x-3 text-slate-400">
-            <a
-              href="https://github.com/Ayush-web28/BrandGuard-AI"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-indigo-400 transition"
-            >
-              GitHub Repository
-            </a>
-            <span>&bull;</span>
-            <span>Apache 2.0 License</span>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
