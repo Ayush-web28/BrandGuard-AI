@@ -1,0 +1,36 @@
+[
+  {
+    "id": "sample-social-1",
+    "name": "Social Launch Post (Heavy Violations)",
+    "format": "social_post",
+    "brand_id": "inkloom",
+    "content_text": "We are thrilled to unveil our game-changer platform brandguard ai! It is a revolutionary silver bullet that guarantees 100% bug-free marketing copy with zero downtime. Unlike other tools, BGAI is the only platform in the world that fixes everything automatically.",
+    "expected_violations": [
+      "INK-TONE-01: Buzzwords ('game-changer', 'revolutionary', 'silver bullet')",
+      "INK-TERM-01: Misnamed product ('brandguard ai', 'BGAI')",
+      "INK-CLAIM-01: Unsubstantiated claims ('100% bug-free', 'zero downtime', 'the only platform')"
+    ]
+  },
+  {
+    "id": "sample-pr-2",
+    "name": "Enterprise Press Release (Missing Regulatory Disclosure)",
+    "format": "press_release",
+    "brand_id": "inkloom",
+    "content_text": "Inkloom AI announces general availability of BrandGuard AI across 500 enterprise customers. The system delivers a paradigm shift in content velocity. Industry benchmarks confirm consistent brand governance increases enterprise revenue by 10% to 33%.",
+    "expected_violations": [
+      "INK-TONE-01: Buzzword ('paradigm shift')",
+      "INK-REG-01: Missing mandatory AI disclosure ('Generated with AI assistance')"
+    ]
+  },
+  {
+    "id": "sample-ad-3",
+    "name": "Cloud Security Ad (TechCorp)",
+    "format": "ad_banner",
+    "brand_id": "techcorp",
+    "content_text": "TechCorp Cloud guarantees 100% unhackable infrastructure with 100% uptime. Protect your enterprise from every cyber threat.",
+    "expected_violations": [
+      "TC-SEC-01: Unverified security claim ('100% unhackable')",
+      "TC-SLA-01: Violates verified SLA ('100% uptime' vs approved '99.99%')"
+    ]
+  }
+]
