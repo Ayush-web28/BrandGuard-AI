@@ -158,6 +158,8 @@
     border-radius: 8px;
     padding: 10px 12px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 
   .card-title {
@@ -259,10 +261,11 @@
   <div class="card" style="border-left: 3.5px solid #4f46e5;">
     <div class="card-title">🔗 Official Submission Links</div>
     <ul style="font-size:8.6pt; margin-left:14px;">
+      <li><strong>Working Project Link (Live Cloud):</strong> <a href="https://brandguard-studio.onrender.com" style="color:#4f46e5; text-decoration:none; font-weight:bold;">https://brandguard-studio.onrender.com</a> <em>(Opens directly in incognito &bull; Zero login required)</em></li>
       <li><strong>Source-Code Repository:</strong> <a href="https://github.com/Ayush-web28/BrandGuard-AI" style="color:#4f46e5; text-decoration:none; font-weight:bold;">https://github.com/Ayush-web28/BrandGuard-AI</a></li>
       <li><strong>Local Quick Launch:</strong> Double-click <code>run_demo.bat</code> in the repository root to launch the unified server and open <code>http://localhost:8000</code>.</li>
-      <li><strong>API Documentation:</strong> Interactive Swagger UI live at <code>http://localhost:8000/docs</code>.</li>
-      <li><strong>Zero-Authentication Policy:</strong> All links and interfaces open instantly in private/incognito windows without login walls.</li>
+      <li><strong>API Documentation:</strong> Interactive Swagger UI live at <code>/docs</code>.</li>
+      <li><strong>Zero-Authentication Policy:</strong> Fully compliant with CodeZen rules — all links open without sign-in barriers.</li>
     </ul>
   </div>
 
@@ -281,7 +284,7 @@
 
 <h2><span class="section-badge">02</span> List of Completed Features (Round 2 Build)</h2>
 
-<div class="grid-2 avoid-break">
+<div class="grid-2">
   <div class="card">
     <div class="card-title">🗂️ 1. Brand Asset & Guideline Vault</div>
     <p style="font-size:8.3pt; color:#475569;">
@@ -319,9 +322,6 @@
     </p>
   </div>
 </div>
-
-<!-- PAGE BREAK: PAGE 2 -->
-<div class="page-break"></div>
 
 <h2><span class="section-badge">03</span> Technical Architecture & Implementation Details</h2>
 
@@ -395,16 +395,20 @@
   </tbody>
 </table>
 
+<!-- PAGE BREAK: PAGE 3 -->
+<div class="page-break"></div>
+
 <h2><span class="section-badge">04</span> Explanation of Changes Made to Original Plan</h2>
 
 <p>
-During the build phase, three pragmatic enhancements were introduced to increase real-world reliability:
+During the build phase, four pragmatic enhancements were introduced to increase real-world reliability and user experience:
 </p>
 
 <ol style="font-size:8.8pt;">
   <li><strong>Dual-Engine Architecture (Zero-Failure Guarantee):</strong> We implemented a full client-side evaluation fallback alongside the FastAPI backend. If the backend is ever unreachable or when running on static deployments, the frontend automatically falls back to an embedded browser-side rule engine, ensuring 100% availability for evaluating judges.</li>
   <li><strong>Unified Single-Port Static Hosting:</strong> FastAPI was configured to automatically serve the compiled frontend production bundle from <code>/dist</code>, allowing users and judges to run the entire application on a single port (<code>8000</code>) via <code>run_demo.bat</code> with zero setup.</li>
   <li><strong>Cryptographic Audit Tokens:</strong> Implemented SHA-256 compliance certificate generation for approved content, providing an immutable audit trail for legal compliance verification.</li>
+  <li><strong>BrandGuard Studio Redesign (Editorial Creative Aesthetics):</strong> Replaced generic AI SaaS styling (purple gradients and neon cards) with an editorial creative agency aesthetic (cream <code>#F5F1E9</code>, ink <code>#202820</code>, terracotta <code>#D97745</code>), adding an interactive Brand Vault, visual GraphRAG Policy Explorer, cinematic landing experience, and split-screen creative review canvas.</li>
 </ol>
 
 <h2><span class="section-badge">05</span> The Three Major Improvements for Round 3 (The Finish)</h2>
