@@ -108,7 +108,7 @@ Open `http://localhost:3000` to access the BrandGuard Studio.
 
 ---
 
-## 🎯 Round 2 Evaluation Checklist
+## 🎯 Evaluation Checklist
 - [x] **Core workflow runs end-to-end:** Content input $\to$ Policy scan $\to$ Rule citation $\to$ Intent-preserving fix $\to$ Human sign-off.
 - [x] **Technical depth:** Hybrid GraphRAG, OpenCV/PIL WCAG luminance math, deterministic claim verification, and LLM reasoning.
 - [x] **Zero friction for judges:** Pre-loaded one-click test cases for social copy, tech announcements, and ad banners.
