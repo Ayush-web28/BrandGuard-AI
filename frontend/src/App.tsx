@@ -13,7 +13,7 @@ import { BrandProfile, ReviewerRole, ScanResult } from './types';
 import { fetchBrands } from './lib/api';
 
 export function App() {
-  const [showLanding, setShowLanding] = useState<boolean>(false);
+  const [showLanding, setShowLanding] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<string>('overview');
   const [brands, setBrands] = useState<BrandProfile[]>([]);
   const [selectedBrandId, setSelectedBrandId] = useState<string>('inkloom');

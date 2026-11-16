@@ -74,7 +74,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterStudio }) => {
               onClick={onEnterStudio}
               className="group relative inline-flex items-center space-x-2.5 bg-[#F5F1E9] hover:bg-[#FFFFFF] text-[#202820] text-xs font-semibold px-5 py-2.5 rounded-full transition-all duration-200 shadow-md hover:shadow-lg active:scale-95"
             >
-              <span>Enter Studio</span>
+              <span>Open Studio</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#D97745] group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
@@ -108,7 +108,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onEnterStudio }) => {
                 onClick={onEnterStudio}
                 className="w-full sm:w-auto inline-flex items-center justify-center space-x-3 bg-[#D97745] hover:bg-[#c66a3b] text-white text-sm font-semibold px-8 py-4 rounded-xl shadow-lg transition-all duration-200 active:scale-98"
               >
-                <span>Launch Creative Review Studio</span>
+                <span>Open Creative Review Studio</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 

@@ -24,7 +24,8 @@ __pycache__/
 .next/
 out/
 build/
-dist/
+/dist/
+!frontend/dist/
 
 # Logs
 npm-debug.log*
