@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from app.api.endpoints import router as api_router
+from app.api.webhook_gate import webhook_router
 
 app = FastAPI(
     title="BrandGuard AI — Governance & Pre-Flight API Gateway",
@@ -24,6 +25,7 @@ app.add_middleware(
 
 # Register REST endpoints under /api
 app.include_router(api_router, prefix="/api")
+app.include_router(webhook_router, prefix="/api/webhook")
 
 # Serve frontend build if dist folder exists
 frontend_dist = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../frontend/dist"))

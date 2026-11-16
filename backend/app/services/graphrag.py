@@ -79,11 +79,19 @@ class PolicyGraphService:
                     term = term_data["term"]
                     preferred = term_data.get("preferred", "")
 
-                    # Case-insensitive boundary search
+                    # If preferred term exists and match is already exactly the preferred term, skip!
                     pattern = r'(?i)\b' + re.escape(term) + r'\b'
                     for match in re.finditer(pattern, content):
                         start, end = match.span()
                         matched_text = content[start:end]
+
+                        # Skip if already exactly matching the canonical preferred form
+                        if preferred and matched_text == preferred:
+                            continue
+
+                        # If term is a sub-phrase of the canonical form (e.g. 'Brandguard' when followed by ' AI'), check ahead
+                        if preferred and preferred.startswith(matched_text) and content[start:start+len(preferred)] == preferred:
+                            continue
 
                         suggested = preferred if preferred else f"[revised without '{matched_text}']"
                         
