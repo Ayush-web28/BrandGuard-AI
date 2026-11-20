@@ -42,3 +42,8 @@ Thumbs.db
 # Temporary artifacts
 temp/
 *.tmp
+
+# Submission Reports & PDFs (kept locally for submission forms, excluded from public repo)
+*.pdf
+BrandGuard_AI_Round_*.html
+BrandGuard_AI_Round_*.pdf
