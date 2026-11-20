@@ -82,6 +82,11 @@ class BrandProfile(BaseModel):
     brand_id: str
     name: str
     tagline: str
+    parent_brand_id: Optional[str] = None
+    region_code: Optional[str] = "GLOBAL"
+    region_name: Optional[str] = "Global Headquarters"
+    jurisdiction_disclosures: List[Dict[str, str]] = Field(default_factory=list)
+    inherited_rules_count: int = 0
     tone: ToneProfile = Field(default_factory=ToneProfile)
     tokens: DesignTokens = Field(default_factory=DesignTokens)
     rules: List[Rule] = Field(default_factory=list)
@@ -107,6 +112,8 @@ class FlaggedIssue(BaseModel):
     end_pos: Optional[int] = None
     is_resolved: bool = False
     accepted_fix: bool = False
+    inheritance_source: Optional[str] = "local" # "global_parent", "regional_statutory", "local"
+    statutory_reference: Optional[str] = None
 
 class VisualMetric(BaseModel):
     extracted_palette: List[str] = Field(default_factory=list)
@@ -125,6 +132,7 @@ class ScanRequest(BaseModel):
     image_base64: Optional[str] = None
     creator_intent: Optional[str] = None
     author: str = "Content Creator"
+    region_code: Optional[str] = None
 
 class ScanResult(BaseModel):
     scan_id: str
@@ -188,3 +196,77 @@ class GovernanceAnalytics(BaseModel):
     recurring_mistakes: Dict[str, int]
     compliance_rate: float
     ambiguity_radar: List[AmbiguitySignal] = Field(default_factory=list)
+
+# --- ROUND 3 IMPROVEMENT 1: VISUAL AUTO-CORRECTION & INPAINTING ---
+
+class ColorReplacement(BaseModel):
+    original_hex: str
+    replacement_hex: str
+    reason: str
+    delta_e: float
+    role: str = "foreground" # "foreground", "background", "accent"
+
+class VisualAutoCorrectRequest(BaseModel):
+    brand_id: str = "inkloom"
+    image_base64: str
+    target_contrast: float = 4.5
+    preferred_token: Optional[str] = None
+
+class VisualAutoCorrectResult(BaseModel):
+    original_contrast: float
+    corrected_contrast: float
+    wcag_aa_compliant: bool
+    wcag_aaa_compliant: bool
+    recolored_image_base64: str
+    replacements: List[ColorReplacement] = Field(default_factory=list)
+    css_tokens_patch: str
+    svg_filter_snippet: Optional[str] = None
+    explanation: str
+
+# --- ROUND 3 IMPROVEMENT 2: HIERARCHICAL MULTI-BRAND & REGIONAL INHERITANCE ---
+
+class BrandHierarchyNode(BaseModel):
+    brand_id: str
+    name: str
+    region_code: str
+    region_name: str
+    parent_brand_id: Optional[str] = None
+    children: List["BrandHierarchyNode"] = Field(default_factory=list)
+    total_rules_enforced: int = 0
+    inherited_rules_count: int = 0
+    local_rules_count: int = 0
+    statutory_frameworks: List[str] = Field(default_factory=list)
+
+# --- ROUND 3 IMPROVEMENT 3: ADVERSARIAL STRESS-TESTING & LOOPHOLE AGENT ---
+
+class StressTestScenario(BaseModel):
+    scenario_id: str
+    category: str # "unsubstantiated_superlative", "ambiguous_comparative", "covert_pricing", "statutory_transparency_evasion", "tone_drift"
+    title: str
+    synthetic_attack_copy: str
+    intended_adversarial_vector: str
+    status: str # "evaded_loophole" or "intercepted"
+    severity: Severity
+    exploited_loophole: Optional[str] = None
+    recommended_patch_rule: Optional[Dict[str, Any]] = None
+    detected_rule_id: Optional[str] = None
+
+class StressTestReport(BaseModel):
+    report_id: str
+    brand_id: str
+    brand_name: str
+    tested_at: datetime = Field(default_factory=datetime.utcnow)
+    resilience_score: int # 0 to 100
+    total_scenarios_tested: int
+    loopholes_discovered: int
+    scenarios: List[StressTestScenario] = Field(default_factory=list)
+    executive_summary: str
+
+class PatchPolicyRequest(BaseModel):
+    brand_id: str
+    scenario_id: str
+    patch_type: str # "add_rule", "add_forbidden_term", "add_statutory_disclosure"
+    rule_patch: Optional[Rule] = None
+    forbidden_terms: List[str] = Field(default_factory=list)
+    preferred_terms: Dict[str, str] = Field(default_factory=dict)
+    mandatory_disclaimer: Optional[str] = None

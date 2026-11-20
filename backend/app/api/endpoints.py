@@ -6,7 +6,8 @@ from fastapi import APIRouter, HTTPException, Query
 from app.models.schemas import (
     ScanRequest, ScanResult, BrandProfile, ReviewRecord, ReviewActionRequest,
     ReviewStatus, ReviewerRole, Comment, GovernanceAnalytics, AmbiguitySignal,
-    FlaggedIssue, ContentFormat
+    FlaggedIssue, ContentFormat, VisualAutoCorrectRequest, VisualAutoCorrectResult,
+    BrandHierarchyNode, StressTestReport, PatchPolicyRequest
 )
 from app.services.vault import vault_service
 from app.services.graphrag import policy_graph_service
@@ -14,6 +15,7 @@ from app.services.claim_verifier import claim_verifier_service
 from app.services.visual_inspector import visual_inspector_service
 from app.services.rewriter import rewriter_service
 from app.core.pii_scrubber import pii_scrubber_service
+from app.services.stress_tester import stress_tester_service
 
 router = APIRouter()
 
@@ -37,9 +39,14 @@ def health_check():
 def list_brands():
     return vault_service.list_brands()
 
+@router.get("/brands/hierarchy", response_model=List[BrandHierarchyNode])
+def get_brand_hierarchy():
+    """Returns the Hierarchical Multi-Brand Policy Tree (Round 3 Improvement 2)."""
+    return vault_service.get_brand_hierarchy()
+
 @router.get("/brands/{brand_id}", response_model=BrandProfile)
 def get_brand(brand_id: str):
-    brand = vault_service.get_brand(brand_id)
+    brand = vault_service.get_effective_brand_profile(brand_id) or vault_service.get_brand(brand_id)
     if not brand:
         raise HTTPException(status_code=404, detail=f"Brand profile '{brand_id}' not found")
     return brand
@@ -52,7 +59,10 @@ def create_or_update_brand(profile: BrandProfile):
 
 @router.post("/scan", response_model=ScanResult)
 def scan_content(req: ScanRequest):
-    brand = vault_service.get_brand(req.brand_id)
+    # Resolve hierarchical multi-brand profile (Global parent + Regional statutory rules)
+    brand = vault_service.get_effective_brand_profile(req.brand_id, req.region_code)
+    if not brand:
+        brand = vault_service.get_brand(req.brand_id)
     if not brand:
         raise HTTPException(status_code=404, detail=f"Brand profile '{req.brand_id}' not found")
 
@@ -67,6 +77,21 @@ def scan_content(req: ScanRequest):
     # 3. Deterministic Claim Verification
     claim_issues = claim_verifier_service.verify_claims(scrubbed_content, brand)
     issues.extend(claim_issues)
+
+    # Annotate inheritance lineage and statutory references on issues
+    for issue in issues:
+        if "EU" in issue.rule_id:
+            issue.inheritance_source = "regional_statutory"
+            issue.statutory_reference = "EU AI Act Reg 2024/1689 & GDPR"
+        elif "US" in issue.rule_id:
+            issue.inheritance_source = "regional_statutory"
+            issue.statutory_reference = "FTC 16 CFR Part 255"
+        elif "UK" in issue.rule_id:
+            issue.inheritance_source = "regional_statutory"
+            issue.statutory_reference = "UK ASA CAP Code"
+        elif brand.parent_brand_id:
+            issue.inheritance_source = "global_parent"
+            issue.statutory_reference = "Global HQ Policy Baseline"
 
     # 4. Multimodal Visual Inspection (if image provided)
     visual_metric = None
@@ -316,3 +341,33 @@ def get_analytics(brand_id: str = "inkloom"):
         compliance_rate=compliance_rate,
         ambiguity_radar=ambiguity_signals
     )
+
+# --- ROUND 3 IMPROVEMENT 1: VISUAL AUTO-CORRECTION ENDPOINT ---
+
+@router.post("/visual/autocorrect", response_model=VisualAutoCorrectResult)
+def autocorrect_visual(req: VisualAutoCorrectRequest):
+    brand = vault_service.get_effective_brand_profile(req.brand_id) or vault_service.get_brand(req.brand_id)
+    if not brand:
+        raise HTTPException(status_code=404, detail=f"Brand profile '{req.brand_id}' not found")
+    return visual_inspector_service.autocorrect_visual(
+        image_base64=req.image_base64,
+        brand=brand,
+        target_contrast=req.target_contrast,
+        preferred_token=req.preferred_token
+    )
+
+# --- ROUND 3 IMPROVEMENT 3: ADVERSARIAL STRESS-TESTING ENDPOINTS ---
+
+@router.post("/stress-test/run", response_model=StressTestReport)
+def run_stress_test(payload: Optional[Dict[str, Any]] = None):
+    brand_id = "inkloom"
+    if payload and "brand_id" in payload:
+        brand_id = payload["brand_id"]
+    return stress_tester_service.run_stress_test(brand_id)
+
+@router.post("/stress-test/patch", response_model=BrandProfile)
+def patch_policy_loophole(req: PatchPolicyRequest):
+    try:
+        return stress_tester_service.apply_policy_patch(req)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
