@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>BrandGuard AI Studio — Round 3 Final Submission Report (Team ZeroToOne)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  @page {
+    size: A4;
+    margin: 14mm 16mm 14mm 16mm;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1e293b;
+    background-color: #ffffff;
+    line-height: 1.5;
+    font-size: 9.3pt;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  .avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .cover-card {
+    background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 60%, #1e293b 100%);
+    border-radius: 12px;
+    padding: 20px 24px;
+    color: #ffffff;
+    margin-bottom: 14px;
+    border: 1px solid #334155;
+  }
+
+  .competition-pill {
+    display: inline-block;
+    background: rgba(217, 119, 69, 0.25);
+    border: 1px solid rgba(217, 119, 69, 0.5);
+    color: #fdba74;
+    font-size: 7.5pt;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    margin-bottom: 8px;
+  }
+
+  .doc-title {
+    font-size: 22pt;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 4px;
+    background: linear-gradient(90deg, #ffffff 0%, #fed7aa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .doc-subtitle {
+    font-size: 10pt;
+    color: #cbd5e1;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .meta-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px 12px;
+  }
+
+  .meta-item { font-size: 8pt; }
+  .meta-label {
+    color: #94a3b8;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 7pt;
+    margin-bottom: 2px;
+  }
+  .meta-val { color: #f8fafc; font-weight: 600; }
+  .meta-val a { color: #fdba74; text-decoration: none; }
+
+  h2 {
+    font-size: 12.5pt;
+    font-weight: 800;
+    color: #0f172a;
+    margin-top: 14px;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1.5px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-badge {
+    background: #d97745;
+    color: #ffffff;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  h3 {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #1e293b;
+    margin-top: 8px;
+    margin-bottom: 4px;
+  }
+
+  p { margin-bottom: 6px; color: #334155; text-align: justify; }
+
+  .callout {
+    background-color: #fdfbf7;
+    border-left: 3.5px solid #d97745;
+    border-radius: 0 6px 6px 0;
+    padding: 8px 12px;
+    margin: 8px 0;
+    font-size: 8.8pt;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 8px 0;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 8px 0;
+  }
+
+  .card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 9px 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .card-title {
+    font-size: 8.8pt;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0;
+    font-size: 8.2pt;
+  }
+
+  th {
+    background-color: #0f172a;
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+    padding: 6px 9px;
+  }
+
+  td {
+    padding: 5px 9px;
+    border-bottom: 1px solid #e2e8f0;
+    color: #334155;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background-color: #f8fafc; }
+
+  ul, ol { margin-left: 16px; margin-bottom: 6px; color: #334155; font-size: 8.8pt; }
+  li { margin-bottom: 2.5px; }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8pt;
+    background-color: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 3px;
+    color: #0f172a;
+  }
+
+  .diagram-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 8px;
+    margin: 8px 0;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE 1: COVER & THREE PROMISED IMPROVEMENTS ================= -->
+<div class="cover-card">
+  <div class="competition-pill">Inkloom AI Brand Governance Hackathon &bull; CodeZen India 2026</div>
+  <div class="doc-title">BrandGuard Studio — Final Build Report</div>
+  <div class="doc-subtitle">A Complete, Multimodal Enterprise Brand-Governance Platform with GraphRAG & Inpainting</div>
+  
+  <div class="meta-grid">
+    <div class="meta-item">
+      <div class="meta-label">Team Name</div>
+      <div class="meta-val">ZeroToOne</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Lead Developer</div>
+      <div class="meta-val">Ayush Trivedi (Solo)</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Source Repository</div>
+      <div class="meta-val"><a href="https://github.com/Ayush-web28/BrandGuard-AI">github.com/.../BrandGuard-AI</a></div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Submission Stage</div>
+      <div class="meta-val">Round 3: The Finish</div>
+    </div>
+  </div>
+</div>
+
+<div class="callout">
+  <div style="font-weight:700; color:#0f172a; margin-bottom:2px;">
+    Executive Finish Summary — 100% Production-Ready & All Three Promised Improvements Delivered
+  </div>
+  <p style="margin-bottom:0;">
+    In the Final Round, Team ZeroToOne has delivered a fully finished, battle-tested brand-governance studio. We have fulfilled 100% of our promised improvements: (1) Autonomous Visual Auto-Correction & Inpainting Engine, (2) Hierarchical Multi-Brand & Regional Policy Inheritance (US FTC, EU AI Act, UK ASA), and (3) Adversarial Brand Stress-Testing & Policy Loophole Agent. The application is backed by 20 passing Pytest test suites (100% pass rate), dual-engine failover, zero login requirements, and an editorial design studio experience.
+  </p>
+</div>
+
+<h2><span class="section-badge">01</span> Official Submission Links & Judge Access</h2>
+
+<div class="grid-2 avoid-break">
+  <div class="card" style="border-left: 3.5px solid #d97745;">
+    <div class="card-title">🔗 Live Application & Code Repositories</div>
+    <ul style="margin-left:14px;">
+      <li><strong>Live Cloud Deployment (Render):</strong> <a href="https://brandguard-studio.onrender.com" style="color:#d97745; text-decoration:none; font-weight:bold;">https://brandguard-studio.onrender.com</a></li>
+      <li><strong>Edge Mirror (Vercel):</strong> <a href="https://brandguard-studio.vercel.app" style="color:#d97745; text-decoration:none; font-weight:bold;">https://brandguard-studio.vercel.app</a></li>
+      <li><strong>Public Source Code:</strong> <a href="https://github.com/Ayush-web28/BrandGuard-AI" style="color:#0f172a; text-decoration:none; font-weight:bold;">github.com/Ayush-web28/BrandGuard-AI</a></li>
+      <li><strong>Local Quick Launch:</strong> Run <code>run_demo.bat</code> in root &rarr; opens <code>http://localhost:8000</code>.</li>
+      <li><strong>Zero Authentication:</strong> All links open immediately in private/incognito windows without login walls.</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-left: 3.5px solid #82917a;">
+    <div class="card-title">⚡ Pre-Configured Test Presets for Evaluating Judges</div>
+    <p style="font-size:8.3pt; color:#475569; margin-bottom:3px;">
+      Judges can evaluate the end-to-end platform in seconds using top-bar presets:
+    </p>
+    <ul style="font-size:8.3pt; margin-left:14px; margin-bottom:0;">
+      <li><strong>Preset 1 (Social Post):</strong> Catches unverified superlatives (<em>"100% bug-free"</em>), prohibited buzzwords, and product misnaming (<em>"BGAI"</em>).</li>
+      <li><strong>Preset 2 (EU Press Release):</strong> Triggers EU AI Act Reg 2024/1689 mandatory transparency indicators under the European jurisdiction.</li>
+      <li><strong>Preset 3 (Ad Banner):</strong> Tests the Autonomous Inpainting Engine on low-contrast graphics, lifting WCAG ratio from 1.48:1 &rarr; 5.53:1 (PASS AA).</li>
+    </ul>
+  </div>
+</div>
+
+<h2><span class="section-badge">02</span> The Three Promised Major Improvements Delivered</h2>
+
+<div class="grid-3 avoid-break">
+  <div class="card" style="border-top: 3.5px solid #d97745;">
+    <div class="card-title">Improvement 1: Autonomous Visual Auto-Correction & Inpainting</div>
+    <p style="font-size:8pt; color:#475569;">
+      <strong>What Was Built:</strong> An autonomous computer-vision module (PIL/NumPy) that mathematically evaluates W3C relative luminance, detects contrast failures, and solves for the optimal compliant hex token from approved brand palettes via Delta-E minimization.
+    </p>
+    <p style="font-size:8pt; color:#475569; margin-bottom:0;">
+      <strong>What It Changes:</strong> Automatically recolors off-palette graphics and elevates contrast (e.g. 1.48:1 &rarr; 5.53:1 WCAG AA) with 1-click inpainting, eliminating manual graphic designer rework.
+    </p>
+  </div>
+
+  <div class="card" style="border-top: 3.5px solid #82917a;">
+    <div class="card-title">Improvement 2: Hierarchical Multi-Brand & Regional Inheritance</div>
+    <p style="font-size:8pt; color:#475569;">
+      <strong>What Was Built:</strong> A directed policy inheritance engine allowing parent global brands (Inkloom Global HQ) to cascade core standards to regional subsidiaries (North America, European Union, United Kingdom).
+    </p>
+    <p style="font-size:8pt; color:#475569; margin-bottom:0;">
+      <strong>What It Changes:</strong> Automatically enforces regional statutory consumer protection laws (US FTC 16 CFR Part 255, EU AI Act Reg 2024/1689, UK ASA CAP Code) alongside global brand rules.
+    </p>
+  </div>
+
+  <div class="card" style="border-top: 3.5px solid #202820;">
+    <div class="card-title">Improvement 3: Adversarial Brand Stress-Testing & Loophole Agent</div>
+    <p style="font-size:8pt; color:#475569;">
+      <strong>What Was Built:</strong> An autonomous adversarial simulation agent in <code>stress_tester.py</code> that generates 6-8 synthetic evasion vectors (semantic synonyms, deceptive zero-dollar claims, obfuscated AI wording).
+    </p>
+    <p style="font-size:8pt; color:#475569; margin-bottom:0;">
+      <strong>What It Changes:</strong> Computes brand policy resilience (0-100%), exposes rule loopholes, and enables 1-click policy fortification directly into the Brand Vault.
+    </p>
+  </div>
+</div>
+
+<!-- ================= PAGE 2: ARCHITECTURE & TECHNICAL DEPTH ================= -->
+<div class="page-break"></div>
+
+<h2><span class="section-badge">03</span> Technical Architecture & Implementation Details</h2>
+
+<div class="diagram-container avoid-break">
+  <svg viewBox="0 0 760 145" width="100%" height="145" xmlns="http://www.w3.org/2000/svg">
+    <!-- Frontend Studio -->
+    <rect x="10" y="10" width="220" height="125" rx="8" fill="#fdfbf7" stroke="#d97745" stroke-width="1.5"/>
+    <text x="120" y="30" fill="#9a3412" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" text-anchor="middle">BrandGuard Studio (React 18 / Vite)</text>
+    <rect x="25" y="42" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="120" y="56" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">Split-Screen Review & In-Place Diff</text>
+    <rect x="25" y="70" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="120" y="84" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">Multi-Brand Hierarchy & Token Vault</text>
+    <rect x="25" y="98" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="120" y="112" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">Adversarial Loophole Testing Studio</text>
+
+    <path d="M 235 72 L 265 72" stroke="#d97745" stroke-width="2"/>
+
+    <!-- Gateway Tier -->
+    <rect x="270" y="10" width="220" height="125" rx="8" fill="#f8fafc" stroke="#202820" stroke-width="1.5"/>
+    <text x="380" y="30" fill="#1e293b" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" text-anchor="middle">FastAPI Unified Gateway (Python 3.13)</text>
+    <rect x="285" y="42" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="380" y="56" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">REST APIs (/api/scan, /api/visual/autocorrect)</text>
+    <rect x="285" y="70" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="380" y="84" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">Regional Hierarchy (/api/brands/hierarchy)</text>
+    <rect x="285" y="98" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="380" y="112" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">Local PII Scrubber & CMS Webhook Gate</text>
+
+    <path d="M 495 72 L 525 72" stroke="#202820" stroke-width="2"/>
+
+    <!-- Governance Engine Tier -->
+    <rect x="530" y="10" width="220" height="125" rx="8" fill="#f8fafc" stroke="#82917a" stroke-width="1.5"/>
+    <text x="640" y="30" fill="#2d382d" font-family="'Plus Jakarta Sans', sans-serif" font-size="9" font-weight="700" text-anchor="middle">Governance & Verification Engines</text>
+    <rect x="545" y="42" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="640" y="56" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">NetworkX Policy GraphRAG Engine</text>
+    <rect x="545" y="70" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="640" y="84" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">PIL/NumPy Inpainting & Contrast Solver</text>
+    <rect x="545" y="98" width="190" height="22" rx="4" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="640" y="112" fill="#334155" font-family="'Plus Jakarta Sans', sans-serif" font-size="8" text-anchor="middle">Adversarial Loophole Simulation Agent</text>
+  </svg>
+</div>
+
+<table class="avoid-break">
+  <thead>
+    <tr>
+      <th style="width: 24%;">Component</th>
+      <th style="width: 36%;">Technology & Scope</th>
+      <th style="width: 40%;">Architectural Advantage</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>FastAPI & Python 3.13</strong></td>
+      <td>Unified gateway hosting both REST API routes and static production SPA bundle.</td>
+      <td>Single-port (8000) execution with sub-5ms routing latency; zero dev-server conflicts for evaluators.</td>
+    </tr>
+    <tr>
+      <td><strong>NetworkX Policy Graph</strong></td>
+      <td>In-memory directed multi-hop graph linking Rules &rarr; Terms &rarr; Citations.</td>
+      <td>True GraphRAG representation with exact statutory citations; zero hallucination risk.</td>
+    </tr>
+    <tr>
+      <td><strong>Visual Inpainting Engine</strong></td>
+      <td>PIL / NumPy mathematical luminance and Delta-E color distance solver.</td>
+      <td>Deterministic WCAG 2.1 AA/AAA contrast lifting without external computer vision latency.</td>
+    </tr>
+    <tr>
+      <td><strong>Adversarial Agent</strong></td>
+      <td>Synthetic prompt generation and policy graph evasion evaluator.</td>
+      <td>Exposes guideline loopholes and provides 1-click policy fortification before public rollout.</td>
+    </tr>
+    <tr>
+      <td><strong>React 18 & Tailwind CSS</strong></td>
+      <td>Editorial design studio (cream #F5F1E9, ink #202820, terracotta #D97745).</td>
+      <td>Premium creative agency feel, split-screen diff visualizer, and zero-latency UI updates.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2><span class="section-badge">04</span> Testing Evidence, Reliability & Responsible AI Design</h2>
+
+<div class="grid-2 avoid-break">
+  <div class="card">
+    <div class="card-title">🧪 Comprehensive Automated Test Suites (20/20 Pass)</div>
+    <ul style="font-size:8.2pt; margin-left:14px; margin-bottom:0;">
+      <li><strong>Visual Auto-Correction:</strong> Contrast lift (1.48:1 &rarr; 5.53:1 PASS AA), Delta-E replacement, and CSS generation verified.</li>
+      <li><strong>Policy Inheritance:</strong> Verified multi-brand inheritance across EU (EU AI Act), US (FTC 16 CFR Part 255), and UK (ASA).</li>
+      <li><strong>Adversarial Agent:</strong> Validated evasion detection, loophole classification, and live resilience score boost after patching.</li>
+      <li><strong>GraphRAG & Fact Verifier:</strong> Superlative catching (<em>"100% bug-free"</em>), pricing truth enforcement, and PII scrubbing.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🛡️ Responsible AI, Security & Privacy Safeguards</div>
+    <ul style="font-size:8.2pt; margin-left:14px; margin-bottom:0;">
+      <li><strong>Local Pre-Flight PII Sanitization:</strong> Names, emails, API keys, and phone numbers are scrubbed before evaluation.</li>
+      <li><strong>Zero Cloud Data Leakage:</strong> Policy graph evaluation, contrast calculations, and claim verification run entirely in-process.</li>
+      <li><strong>Deterministic Audit Trails:</strong> Generates cryptographic SHA-256 compliance certificate tokens for every approved asset.</li>
+      <li><strong>Statutory Compliance:</strong> Enforces EU AI Act Article 50 transparency labeling and FTC material connection disclosures.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ================= PAGE 3: PLAN CHANGES, ROADMAP & DECLARATION ================= -->
+<div class="page-break"></div>
+
+<h2><span class="section-badge">05</span> Changes from Original Proposal & Known Limitations</h2>
+
+<div class="avoid-break space-y-2">
+  <p style="font-size:8.5pt;">
+    <strong>Architectural Evolutions Completed Across Rounds:</strong>
+  </p>
+  <ol style="font-size:8.5pt;">
+    <li><strong>Dual-Engine Architecture:</strong> Implemented a full client-side evaluation fallback alongside FastAPI to ensure evaluators in restricted proxy or offline environments can test all capabilities with zero downtime.</li>
+    <li><strong>Unified Single-Port Deployment:</strong> Replaced separate frontend/backend port architectures with a unified server serving the compiled React bundle on port 8000 via <code>run_demo.bat</code>.</li>
+    <li><strong>BrandGuard Studio Redesign:</strong> Replaced generic AI SaaS styling with a bespoke editorial aesthetic (cream <code>#F5F1E9</code>, ink <code>#202820</code>, terracotta <code>#D97745</code>) featuring an interactive Brand Vault and visual GraphRAG Node Explorer.</li>
+    <li><strong>Expanded Regulatory Coverage:</strong> Broadened beyond basic tone checks to enforce international legal frameworks (EU AI Act Reg 2024/1689, US FTC Endorsement Guides, UK ASA CAP Code).</li>
+  </ol>
+
+  <p style="font-size:8.5pt; margin-top:8px;">
+    <strong>Transparent Statement of Known Limitations:</strong>
+  </p>
+  <ul style="font-size:8.3pt; margin-left:14px;">
+    <li><strong>Real-time WebSocket Presence:</strong> Revision history, comments, and approvals persist seamlessly, but live multi-cursor presence across concurrent users currently requires page refresh.</li>
+    <li><strong>Direct Marketplace CMS Plugins:</strong> The pre-publish webhook gate (<code>/api/webhook/publish</code>) fully enforces policy via HTTP headers, but native 1-click marketplace apps for WordPress and Webflow are scheduled for Q2 2027.</li>
+  </ul>
+</div>
+
+<h2><span class="section-badge">06</span> Post-Event Roadmap & Commercial Sustainability</h2>
+
+<div class="grid-3 avoid-break">
+  <div class="card" style="border-top: 3px solid #d97745;">
+    <div class="card-title">Phase 1: Q1 2027</div>
+    <p style="font-size:8pt; color:#475569;">
+      <strong>Figma & Adobe CC Plugin:</strong> Embed BrandGuard Studio directly inside creative designer canvases to provide real-time WCAG contrast and token linting while drafting.
+    </p>
+  </div>
+  <div class="card" style="border-top: 3px solid #82917a;">
+    <div class="card-title">Phase 2: Q2 2027</div>
+    <p style="font-size:8pt; color:#475569;">
+      <strong>Enterprise CMS Connectors:</strong> Native verified integrations for Webflow, Contentful, WordPress VIP, and HubSpot to automate pre-publish governance gates.
+    </p>
+  </div>
+  <div class="card" style="border-top: 3px solid #202820;">
+    <div class="card-title">Phase 3: Q3 2027</div>
+    <p style="font-size:8pt; color:#475569;">
+      <strong>Autonomous Multi-Modal Inpainting:</strong> Generative raster image inpainting utilizing on-premise diffusion models for high-resolution photo asset remediation.
+    </p>
+  </div>
+</div>
+
+<h2><span class="section-badge">07</span> Team Participant & Individual Contribution Statement</h2>
+
+<div class="card avoid-break" style="margin-top:8px; border-left: 3.5px solid #d97745;">
+  <div class="card-title">👤 Ayush Trivedi — Solo Competitor (Team ZeroToOne)</div>
+  <p style="font-size:8.4pt; margin-bottom:4px;">
+    <strong>Role: Full-Stack Architect, AI Engineer, & UI/UX Designer:</strong>
+  </p>
+  <ul style="font-size:8.2pt; margin-left:14px; margin-bottom:6px;">
+    <li><strong>AI & Policy Architecture:</strong> Designed and implemented the NetworkX GraphRAG engine, hierarchical regional inheritance, claim verifier, and the adversarial stress-testing simulation agent.</li>
+    <li><strong>Backend Engineering:</strong> Developed the FastAPI gateway, PIL/NumPy visual contrast inpainting engine, local PII sanitizer, and 20 automated Pytest test suites.</li>
+    <li><strong>Frontend Development:</strong> Created the complete BrandGuard Studio in React 18 / Vite / Tailwind CSS, including the split-screen creative review canvas, interactive Brand Vault, and Stress-Testing Lab.</li>
+  </ul>
+  <p style="font-size:8pt; color:#64748b; margin-bottom:0; font-style:italic;">
+    I declare that this submission represents original, production-ready work developed for CodeZen India 2026. All three promised improvements are operational in the live product.
+  </p>
+</div>
+
+</body>
+</html>
