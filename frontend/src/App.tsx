@@ -6,6 +6,7 @@ import { Studio } from './components/Studio';
 import { VaultView } from './components/VaultView';
 import { PolicyGraphView } from './components/PolicyGraphView';
 import { AnalyticsView } from './components/AnalyticsView';
+import { StressTestView } from './components/StressTestView';
 import { ReviewsView } from './components/ReviewsView';
 import { TeamView } from './components/TeamView';
 import { SettingsView } from './components/SettingsView';
@@ -81,6 +82,16 @@ export function App() {
 
             {activeTab === 'graph' && (
               <PolicyGraphView currentBrand={currentBrand} />
+            )}
+
+            {activeTab === 'stress-test' && (
+              <StressTestView
+                brand={currentBrand}
+                onRefreshBrand={async () => {
+                  const b = await fetchBrands();
+                  setBrands(b);
+                }}
+              />
             )}
 
             {activeTab === 'analytics' && (

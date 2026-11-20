@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   LayoutDashboard, Sparkles, BookOpen, Network, BarChart3,
-  CheckSquare, Users, Settings, ShieldCheck, ChevronRight, LogOut
+  CheckSquare, Users, Settings, ShieldCheck, ChevronRight, LogOut, Zap
 } from 'lucide-react';
 import { BrandProfile, ReviewerRole } from '../types';
 
@@ -31,6 +31,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { id: 'studio', label: 'Creative Review', icon: Sparkles },
     { id: 'vault', label: 'Brand Vault', icon: BookOpen },
     { id: 'graph', label: 'Policy Graph', icon: Network },
+    { id: 'stress-test', label: 'Stress Testing', icon: Zap },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   ];
 
