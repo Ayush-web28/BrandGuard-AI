@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Palette, Type, FileText, CheckCircle, AlertOctagon, BookOpen,
-  Sliders, ShieldCheck, Download, Plus, Copy, Check
+  Sliders, ShieldCheck, Download, Plus, Copy, Check, Globe, GitBranch,
+  Building2, Landmark, Shield
 } from 'lucide-react';
-import { BrandProfile, Rule, ApprovedFact } from '../types';
+import { BrandProfile, Rule, ApprovedFact, BrandHierarchyNode } from '../types';
+import { fetchBrandHierarchy } from '../lib/api';
 
 interface VaultViewProps {
   currentBrand: BrandProfile;
 }
 
 export const VaultView: React.FC<VaultViewProps> = ({ currentBrand }) => {
-  const [activeSection, setActiveSection] = useState<'palette' | 'typography' | 'terminology' | 'voice' | 'facts' | 'docs'>('palette');
+  const [activeSection, setActiveSection] = useState<'palette' | 'typography' | 'terminology' | 'voice' | 'facts' | 'hierarchy'>('palette');
   const [copiedHex, setCopiedHex] = useState<string | null>(null);
+  const [hierarchyData, setHierarchyData] = useState<BrandHierarchyNode[]>([]);
+  const [selectedRegion, setSelectedRegion] = useState<string>('all');
+
+  useEffect(() => {
+    async function loadHierarchy() {
+      const data = await fetchBrandHierarchy();
+      setHierarchyData(data);
+    }
+    loadHierarchy();
+  }, []);
 
   const handleCopyHex = (hex: string) => {
     navigator.clipboard.writeText(hex);
@@ -69,6 +81,7 @@ export const VaultView: React.FC<VaultViewProps> = ({ currentBrand }) => {
             { id: 'terminology', label: 'Terminology', icon: BookOpen },
             { id: 'voice', label: 'Voice & Tone', icon: Sliders },
             { id: 'facts', label: 'Verified Proofs', icon: CheckCircle },
+            { id: 'hierarchy', label: 'Multi-Brand & Regional', icon: Globe },
           ].map((tab) => {
             const Icon = tab.icon;
             const isActive = activeSection === tab.id;
@@ -364,6 +377,218 @@ export const VaultView: React.FC<VaultViewProps> = ({ currentBrand }) => {
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+      )}
+
+      {/* ================= SECTION 6: HIERARCHICAL MULTI-BRAND & REGIONAL POLICY TREE ================= */}
+      {activeSection === 'hierarchy' && (
+        <div className="space-y-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div>
+              <div className="flex items-center space-x-2 text-xs font-mono uppercase tracking-widest text-[#D97745] font-semibold mb-1">
+                <Globe className="w-3.5 h-3.5" />
+                <span>Round 3 Improvement 2 &bull; Hierarchical Multi-Brand & Regional Inheritance</span>
+              </div>
+              <h3 className="font-serif text-2xl font-normal text-[#202820]">
+                Enterprise Policy Inheritance Architecture
+              </h3>
+              <p className="text-xs text-[#202820]/75 max-w-2xl mt-1">
+                Global parent guidelines dynamically cascade to regional subsidiaries while strictly enforcing statutory consumer protection and transparency mandates (FTC, EU AI Act, ASA).
+              </p>
+            </div>
+
+            <div className="inline-flex items-center space-x-2 bg-white px-3 py-1.5 rounded-lg border border-[#D8CBB7] text-xs font-mono text-[#82917A]">
+              <GitBranch className="w-3.5 h-3.5" />
+              <span>Hierarchical Graph Enabled</span>
+            </div>
+          </div>
+
+          {/* Hierarchy Tree Diagram Card */}
+          <div className="p-6 rounded-2xl bg-white border border-[#D8CBB7] shadow-sm space-y-6">
+            
+            {/* Parent Global Brand Node */}
+            <div className="p-5 rounded-xl bg-[#202820] text-white border border-[#343e34] shadow-md relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#D97745]/10 rounded-full blur-2xl pointer-events-none" />
+              
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center space-x-3.5">
+                  <div className="w-10 h-10 rounded-xl bg-[#D97745] text-white flex items-center justify-center font-serif font-bold text-lg shadow-sm">
+                    G
+                  </div>
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-[#D97745] font-semibold">
+                        Parent Brand &bull; Root Authority
+                      </span>
+                      <span className="bg-[#82917A]/20 text-[#82917A] text-[10px] font-mono px-2 py-0.5 rounded-full">
+                        GLOBAL HQ
+                      </span>
+                    </div>
+                    <h4 className="font-serif text-lg font-bold text-[#F5F1E9]">
+                      Inkloom AI (Global Headquarters)
+                    </h4>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-3 text-xs font-mono text-[#D8CBB7]">
+                  <span className="bg-[#2a342a] px-3 py-1.5 rounded-lg border border-[#3b473b]">
+                    <strong>6</strong> Universal Global Rules
+                  </span>
+                  <span className="bg-[#2a342a] px-3 py-1.5 rounded-lg border border-[#3b473b]">
+                    <strong>100%</strong> Policy Cascade
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-4 border-t border-[#343e34] flex flex-wrap items-center gap-3 text-xs text-[#D8CBB7]">
+                <span className="text-[11px] font-mono text-[#82917A]">Cascading Directives:</span>
+                <span className="bg-white/5 px-2.5 py-1 rounded-md text-[11px] font-mono">INK-TONE-01 (Authoritative Voice)</span>
+                <span className="bg-white/5 px-2.5 py-1 rounded-md text-[11px] font-mono">INK-CLAIM-01 (Substantiation)</span>
+                <span className="bg-white/5 px-2.5 py-1 rounded-md text-[11px] font-mono">INK-VIS-01 (Color Tokens)</span>
+                <span className="bg-white/5 px-2.5 py-1 rounded-md text-[11px] font-mono">INK-ACC-01 (WCAG Contrast)</span>
+              </div>
+            </div>
+
+            {/* Downward Tree Connector Arrow */}
+            <div className="flex items-center justify-center -my-2">
+              <div className="flex flex-col items-center text-[#D97745]">
+                <div className="w-0.5 h-6 bg-[#D8CBB7]" />
+                <span className="text-[10px] font-mono uppercase tracking-widest bg-[#F5F1E9] border border-[#D8CBB7] px-3 py-0.5 rounded-full font-semibold">
+                  Inherited Policy Delegation
+                </span>
+                <div className="w-0.5 h-6 bg-[#D8CBB7]" />
+              </div>
+            </div>
+
+            {/* Regional Subsidiary Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+              
+              {/* North America */}
+              <div className="p-5 rounded-xl bg-[#F5F1E9]/70 border border-[#D8CBB7] hover:border-[#D97745] transition space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#D97745] bg-[#D97745]/10 px-2 py-0.5 rounded">
+                    US Jurisdiction
+                  </span>
+                  <span className="text-[11px] font-mono text-[#82917A] font-semibold">
+                    8 Rules Total
+                  </span>
+                </div>
+                <div>
+                  <h4 className="font-serif text-base font-bold text-[#202820]">
+                    Inkloom North America
+                  </h4>
+                  <p className="text-xs text-[#202820]/70 mt-0.5">
+                    US Federal Trade Commission (FTC) & SOC2 compliance.
+                  </p>
+                </div>
+                <div className="space-y-1.5 pt-2 border-t border-[#D8CBB7]/80 text-xs font-mono">
+                  <div className="flex justify-between text-[#202820]/75">
+                    <span>Inherited from Global:</span>
+                    <span className="font-bold text-[#202820]">6 Rules</span>
+                  </div>
+                  <div className="flex justify-between text-[#D97745]">
+                    <span>Regional Statutory:</span>
+                    <span className="font-bold">2 Rules</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-[#D8CBB7]/80">
+                  <span className="text-[10px] font-mono uppercase text-[#82917A] block mb-1">
+                    Enforced Frameworks:
+                  </span>
+                  <span className="inline-block bg-white text-[#202820] text-[10px] font-mono px-2 py-0.5 rounded border border-[#D8CBB7] mr-1 mb-1">
+                    FTC 16 CFR Part 255
+                  </span>
+                  <span className="inline-block bg-white text-[#202820] text-[10px] font-mono px-2 py-0.5 rounded border border-[#D8CBB7]">
+                    SOC2 Type II
+                  </span>
+                </div>
+              </div>
+
+              {/* European Union */}
+              <div className="p-5 rounded-xl bg-[#F5F1E9]/70 border border-[#D8CBB7] hover:border-[#82917A] transition space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#82917A] bg-[#82917A]/15 px-2 py-0.5 rounded">
+                    EU Jurisdiction
+                  </span>
+                  <span className="text-[11px] font-mono text-[#82917A] font-semibold">
+                    8 Rules Total
+                  </span>
+                </div>
+                <div>
+                  <h4 className="font-serif text-base font-bold text-[#202820]">
+                    Inkloom Europe
+                  </h4>
+                  <p className="text-xs text-[#202820]/70 mt-0.5">
+                    EU AI Act (Regulation 2024/1689) & GDPR safeguards.
+                  </p>
+                </div>
+                <div className="space-y-1.5 pt-2 border-t border-[#D8CBB7]/80 text-xs font-mono">
+                  <div className="flex justify-between text-[#202820]/75">
+                    <span>Inherited from Global:</span>
+                    <span className="font-bold text-[#202820]">6 Rules</span>
+                  </div>
+                  <div className="flex justify-between text-[#82917A]">
+                    <span>Regional Statutory:</span>
+                    <span className="font-bold">2 Rules</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-[#D8CBB7]/80">
+                  <span className="text-[10px] font-mono uppercase text-[#82917A] block mb-1">
+                    Enforced Frameworks:
+                  </span>
+                  <span className="inline-block bg-white text-[#202820] text-[10px] font-mono px-2 py-0.5 rounded border border-[#D8CBB7] mr-1 mb-1">
+                    EU AI Act 2024/1689
+                  </span>
+                  <span className="inline-block bg-white text-[#202820] text-[10px] font-mono px-2 py-0.5 rounded border border-[#D8CBB7]">
+                    GDPR Art 22
+                  </span>
+                </div>
+              </div>
+
+              {/* United Kingdom */}
+              <div className="p-5 rounded-xl bg-[#F5F1E9]/70 border border-[#D8CBB7] hover:border-[#202820] transition space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#202820] bg-[#202820]/10 px-2 py-0.5 rounded">
+                    UK Jurisdiction
+                  </span>
+                  <span className="text-[11px] font-mono text-[#82917A] font-semibold">
+                    7 Rules Total
+                  </span>
+                </div>
+                <div>
+                  <h4 className="font-serif text-base font-bold text-[#202820]">
+                    Inkloom United Kingdom
+                  </h4>
+                  <p className="text-xs text-[#202820]/70 mt-0.5">
+                    UK Advertising Standards Authority (ASA) & CMA Code.
+                  </p>
+                </div>
+                <div className="space-y-1.5 pt-2 border-t border-[#D8CBB7]/80 text-xs font-mono">
+                  <div className="flex justify-between text-[#202820]/75">
+                    <span>Inherited from Global:</span>
+                    <span className="font-bold text-[#202820]">6 Rules</span>
+                  </div>
+                  <div className="flex justify-between text-[#202820]">
+                    <span>Regional Statutory:</span>
+                    <span className="font-bold">1 Rule</span>
+                  </div>
+                </div>
+                <div className="pt-2 border-t border-[#D8CBB7]/80">
+                  <span className="text-[10px] font-mono uppercase text-[#82917A] block mb-1">
+                    Enforced Frameworks:
+                  </span>
+                  <span className="inline-block bg-white text-[#202820] text-[10px] font-mono px-2 py-0.5 rounded border border-[#D8CBB7] mr-1 mb-1">
+                    ASA CAP Code Sec 3
+                  </span>
+                  <span className="inline-block bg-white text-[#202820] text-[10px] font-mono px-2 py-0.5 rounded border border-[#D8CBB7]">
+                    CMA Green Claims
+                  </span>
+                </div>
+              </div>
+
+            </div>
+
           </div>
         </div>
       )}
